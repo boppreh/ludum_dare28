@@ -32,7 +32,7 @@ Mechanics
     [ ] Changes game attributes
     [ ] Display change and timer in UI
     [ ] Reverts after set time
-[ ] Vary attributes by level
+[x] Vary attributes by mission
 [ ] Check mission objective
 
 

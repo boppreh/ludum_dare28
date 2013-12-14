@@ -16,15 +16,16 @@
         <script>
 window.onclick = function() { gl4.isRunning() ? gl4.stop() : gl4.start(); }
 
-function Mission(nLives) {
+function Mission(nLives, condition) {
     this.nLives = nLives;
+    this.condition = condition;
 }
 
 Mission.prototype.start = function () {
     var lives = gl4.createText(this.nLives, 'lives', {x: 0, y: 60}, {}, {},
                                {'textAlign': 'left', 'font': '72px Impact',
                                 'fillStyle': 'red'});
-    var points = gl4.createText(0, 'points', {x: 0, y: 60 + 72}, {}, {},
+    this.points = gl4.createText(0, 'points', {x: 0, y: 60 + 72}, {}, {},
                                 {'textAlign': 'left', 'font': '72px Impact',
                                  'fillStyle': 'green'});
 
@@ -43,7 +44,7 @@ Mission.prototype.start = function () {
     on(hit('ball', 'enemy'),
        slowDown(MATCH_1, {x: 0.7, y: 0.7}),
        destroy(MATCH_2),
-       points.increment);
+       this.points.increment);
     attract('enemy', 'target', 0.5, 1);
     on(hit('enemy', 'target'),
        destroy(MATCH_1),
@@ -51,6 +52,11 @@ Mission.prototype.start = function () {
 
     on(lives.isZero,
        this.stop);
+
+    var condition = this.condition;
+    var mission = this;
+    on(function () { return condition(mission); },
+       gl4.stop);
 };
 
 Mission.prototype.stop = function () {
@@ -58,7 +64,9 @@ Mission.prototype.stop = function () {
 };
 
 
-var mission = new Mission(1);
+var mission = new Mission(10, function (mission) {
+    return mission.points.text >= 10;
+});
 mission.start();
 gl4.start(true);
         </script>
