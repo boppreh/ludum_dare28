@@ -19,7 +19,7 @@
         <script type='text/javascript' src='../gl4/conditions.js'></script>
         <script type='text/javascript' src='../gl4/effects.js'></script>
         <script>
-//window.onclick = function() { gl4.isRunning() ? gl4.stop() : gl4.start(); }
+window.onclick = function() { gl4.isRunning() ? gl4.stop() : gl4.start(); }
 
 var star = gl4.createImg('star.png', 'player'); 
 star.effects.push(shadow(10, 10, 10));
@@ -32,6 +32,9 @@ on(or(mouseDown(), keyDown('space')),
       //sound('http://opengameart.org/sites/default/files/jumpland.wav'),
       attract('ball', 'mouse', -5, 1000)));
 reflect('ball');
+
+on(pulse(), create('star.png', 'enemy', rand({x: 0, y: 0}, {x: 800, y: 600})));
+on(hit('ball', 'enemy'),  slowDown(MATCH_1, {x: 0.01, y: 0.01}), destroy(MATCH_2));
 
 
 gl4.start(true);
