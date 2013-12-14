@@ -16,12 +16,12 @@
         <script>
 window.onclick = function() { gl4.isRunning() ? gl4.stop() : gl4.start(); }
 
-function Mission(lives) {
-    this.lives = lives;
+function Mission(nLives) {
+    this.nLives = nLives;
 }
 
 Mission.prototype.start = function () {
-    var lives = gl4.createText(this.lives, 'lives', {x: 0, y: 60}, {}, {},
+    var lives = gl4.createText(this.nLives, 'lives', {x: 0, y: 60}, {}, {},
                                {'textAlign': 'left', 'font': '72px Impact',
                                 'fillStyle': 'red'});
     var points = gl4.createText(0, 'points', {x: 0, y: 60 + 72}, {}, {},
@@ -48,6 +48,9 @@ Mission.prototype.start = function () {
     on(hit('enemy', 'target'),
        destroy(MATCH_1),
        lives.decrement);
+
+    on(lives.isZero,
+       this.stop);
 };
 
 Mission.prototype.stop = function () {
@@ -55,7 +58,8 @@ Mission.prototype.stop = function () {
 };
 
 
-new Mission(10).start();
+var mission = new Mission(1);
+mission.start();
 gl4.start(true);
         </script>
     </body>
