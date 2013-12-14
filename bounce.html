@@ -16,10 +16,18 @@
         <script>
 window.onclick = function() { gl4.isRunning() ? gl4.stop() : gl4.start(); }
 
+var lives = gl4.createText(20, 'lives', {x: 0, y: 60}, {}, {},
+                           {'textAlign': 'left', 'font': '72px Impact',
+                            'fillStyle': 'red'});
+var points = gl4.createText(0, 'points', {x: 0, y: 60 + 72}, {}, {},
+                            {'textAlign': 'left', 'font': '72px Impact',
+                             'fillStyle': 'green'});
+
 var star = gl4.createImg('star.png', 'player'); 
 star.effects.push(shadow(10, 10, 10));
 var ball = gl4.createImg('star.png', 'ball', {}, {}, {x: 0.01, y: 0.01, angle: 0}); 
 ball.effects.push(glow('blue', 10));
+var target = gl4.createImg('star.png', 'target'); 
 
 moveTo('player', 'mouse');
 on(or(mouseDown(), keyDown('space')),
@@ -27,8 +35,14 @@ on(or(mouseDown(), keyDown('space')),
 reflect('ball');
 
 on(pulse(), create('star.png', 'enemy', rand({x: 0, y: 0}, {x: 800, y: 600})));
-on(hit('ball', 'enemy'),  slowDown(MATCH_1, {x: 0.7, y: 0.7}), destroy(MATCH_2));
-attract('enemy', 'screen', 0.5, 1);
+on(hit('ball', 'enemy'),
+   slowDown(MATCH_1, {x: 0.7, y: 0.7}),
+   destroy(MATCH_2),
+   points.increment);
+attract('enemy', 'target', 0.5, 1);
+on(hit('enemy', 'target'),
+   destroy(MATCH_1),
+   lives.decrement);
 
 
 gl4.start(true);
