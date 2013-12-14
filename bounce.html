@@ -15,7 +15,7 @@
         <script type='text/javascript' src='../gl4/conditions.js'></script>
         <script type='text/javascript' src='../gl4/effects.js'></script>
         <script>
-window.onclick = function() { gl4.isRunning() ? gl4.stop() : gl4.start(); }
+window.onclick = function() { if (!gl4.isRunning()) { gl4.start(true); }};
 
 function randCircle(center, radius) {
     var pos = {x: 0, y: 0};
