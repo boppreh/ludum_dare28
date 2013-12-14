@@ -33,7 +33,7 @@ Mechanics
     [ ] Display change and timer in UI
     [ ] Reverts after set time
 [x] Vary attributes by mission
-[ ] Check mission objective
+[x] Check mission objective
 
 
 Effects
