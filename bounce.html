@@ -31,7 +31,7 @@ var target = gl4.createImg('star.png', 'target');
 
 moveTo('player', 'mouse');
 on(or(mouseDown(), keyDown('space')),
-   attract('ball', 'mouse', -2, -20));
+   attract('ball', 'mouse', 2, 20));
 reflect('ball');
 
 on(pulse(), create('star.png', 'enemy', rand({x: 0, y: 0}, {x: 800, y: 600})));
