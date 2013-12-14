@@ -10,15 +10,15 @@ Screens
 Mechanics
 =========
 
-[ ] Mouse loosely controls ball inertia
+[x] Mouse loosely controls ball inertia
 [ ] Enemies spawn
-	[ ] From inside an area
+	[x] From inside an area
 	[ ] From the perimeter of an area
-[ ] Ball hitting enemy destroys enemy
+[x] Ball hitting enemy destroys enemy
 [ ] Enemies drops
 	[ ] Enemies drop items on death
 	[ ] Ball (or mouse?) can pick up items
-[ ] Enemy hitting center takes life
+[x] Enemy hitting center takes life
 [ ] Variable game attributes
 	[ ] Ball attraction force
     [ ] Ball natural friction
@@ -39,7 +39,7 @@ Mechanics
 Effects
 =======
 
-[ ] Permanent effect around ball
+[x] Permanent effect around ball
 [ ] Enemy is created
 [ ] Player attracts ball
 [ ] Ball hits enemy
