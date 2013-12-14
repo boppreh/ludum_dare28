@@ -23,12 +23,11 @@ ball.effects.push(glow('blue', 10));
 
 moveTo('player', 'mouse');
 on(or(mouseDown(), keyDown('space')),
-   on(hit('player', 'ball'),
-      attract('ball', 'mouse', -5, 1000)));
+   attract('ball', 'mouse', -2, -20));
 reflect('ball');
 
 on(pulse(), create('star.png', 'enemy', rand({x: 0, y: 0}, {x: 800, y: 600})));
-on(hit('ball', 'enemy'),  slowDown(MATCH_1, {x: 0.01, y: 0.01}), destroy(MATCH_2));
+on(hit('ball', 'enemy'),  slowDown(MATCH_1, {x: 0.7, y: 0.7}), destroy(MATCH_2));
 
 
 gl4.start(true);
