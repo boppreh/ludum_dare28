@@ -17,6 +17,16 @@
         <script>
 window.onclick = function() { gl4.isRunning() ? gl4.stop() : gl4.start(); }
 
+function randCircle(center, radius) {
+    var pos = {x: 0, y: 0};
+    gl4.register(function () {
+        var angle = Math.random() * Math.PI * 2;
+        pos.x = center.x + Math.cos(angle) * radius;
+        pos.y = center.y + Math.sin(angle) * radius;
+    });
+    return pos;
+}
+
 function Mission(nLives, successCondition, onSuccess, onFailure) {
     this.nLives = nLives;
     this.successCondition = successCondition || function () { return false; };
@@ -43,12 +53,18 @@ Mission.prototype.start = function () {
        attract('ball', 'mouse', 2, 20));
     reflect('ball');
 
-    on(pulse(), create('enemy.png', 'enemy', rand({x: 0, y: 0}, {x: 800, y: 600})));
+    on(pulse(), create('enemy.png', 'enemy', randCircle(gl4.screen.pos, 400)));
     on(hit('ball', 'enemy'),
        slowDown(MATCH_1, {x: 0.7, y: 0.7}),
        destroy(MATCH_2),
        points.increment);
-    attract('enemy', 'target', 0.5, 1);
+
+    follow('enemy', 'target', 2);
+
+    gl4.register('enemy', function(enemy) {
+        // Make enemy face destination.
+        enemy.pos.angle = Math.atan2(-enemy.inertia.y, enemy.inertia.x);
+    });
     on(hit('enemy', 'target'),
        destroy(MATCH_1),
        lives.decrement);
