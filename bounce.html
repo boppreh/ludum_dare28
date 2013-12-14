@@ -8,11 +8,6 @@
 
     <body style='background: black;'>
         <canvas id='canvas' width=800 height=600 style='display: block; background: white; margin-left: auto; margin-right: auto;'></canvas>
-        <!--
-        <audio autoplay loop>
-            <source src="http://opengameart.org/sites/default/files/2531My%20new%20favorite%2C%20even%20with%20reason!%20_0.ogg" type="audio/ogg" />
-        </audio>
-        -->
 
         <script type='text/javascript' src='../gl4/gl4.js'></script>
         <script type='text/javascript' src='../gl4/behaviors.js'></script>
@@ -29,7 +24,6 @@ ball.effects.push(glow('blue', 10));
 moveTo('player', 'mouse');
 on(or(mouseDown(), keyDown('space')),
    on(hit('player', 'ball'),
-      //sound('http://opengameart.org/sites/default/files/jumpland.wav'),
       attract('ball', 'mouse', -5, 1000)));
 reflect('ball');
 
