@@ -42,8 +42,9 @@ Mission.prototype.start = function () {
                                 {'textAlign': 'left', 'font': '72px Impact',
                                  'fillStyle': 'green'});
 
-    var star = gl4.createImg('player.png', 'player'); 
-    star.effects.push(shadow(10, 10, 10));
+    var player = gl4.createImg('player.png', 'player'); 
+    push('player', {angle: 0.01})
+    player.effects.push(shadow(10, 10, 10));
     var ball = gl4.createImg('ball.png', 'ball', {}, {}, {x: 0.01, y: 0.01, angle: 0}); 
     ball.effects.push(glow('blue', 10));
     var target = gl4.createImg('target.png', 'target'); 
