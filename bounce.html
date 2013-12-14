@@ -28,6 +28,7 @@ reflect('ball');
 
 on(pulse(), create('star.png', 'enemy', rand({x: 0, y: 0}, {x: 800, y: 600})));
 on(hit('ball', 'enemy'),  slowDown(MATCH_1, {x: 0.7, y: 0.7}), destroy(MATCH_2));
+attract('enemy', 'screen', 0.5, 1);
 
 
 gl4.start(true);
