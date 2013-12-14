@@ -15,18 +15,6 @@
         <script type='text/javascript' src='../gl4/conditions.js'></script>
         <script type='text/javascript' src='../gl4/effects.js'></script>
         <script>
-window.onclick = function() { if (!gl4.isRunning()) { gl4.start(true); }};
-
-function randCircle(center, radius) {
-    var pos = {x: 0, y: 0};
-    gl4.register(function () {
-        var angle = Math.random() * Math.PI * 2;
-        pos.x = center.x + Math.cos(angle) * radius;
-        pos.y = center.y + Math.sin(angle) * radius;
-    });
-    return pos;
-}
-
 function Mission(nLives, successCondition, onSuccess, onFailure) {
     this.nLives = nLives;
     this.successCondition = successCondition || function () { return false; };
@@ -78,13 +66,12 @@ Mission.prototype.start = function () {
 };
 
 Mission.prototype.stop = function () {
-    gl4.clear();
+    console.log('Ended mission.');
 };
 
 
 var mission = new Mission(10);
 mission.start();
-gl4.start(true);
         </script>
     </body>
 </html>
