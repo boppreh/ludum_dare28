@@ -7,7 +7,8 @@
     </head>
 
     <body style='background: black;'>
-        <canvas id='canvas' width=800 height=600 style='display: block; background: white; margin-left: auto; margin-right: auto;'></canvas>
+        <canvas id='canvas' width=800 height=600 style='display: block;
+        background: #111; margin-left: auto; margin-right: auto;'></canvas>
 
         <script type='text/javascript' src='../gl4/gl4.js'></script>
         <script type='text/javascript' src='../gl4/behaviors.js'></script>
@@ -31,18 +32,18 @@ Mission.prototype.start = function () {
                                 {'textAlign': 'left', 'font': '72px Impact',
                                  'fillStyle': 'green'});
 
-    var star = gl4.createImg('star.png', 'player'); 
+    var star = gl4.createImg('player.png', 'player'); 
     star.effects.push(shadow(10, 10, 10));
-    var ball = gl4.createImg('star.png', 'ball', {}, {}, {x: 0.01, y: 0.01, angle: 0}); 
+    var ball = gl4.createImg('ball.png', 'ball', {}, {}, {x: 0.01, y: 0.01, angle: 0}); 
     ball.effects.push(glow('blue', 10));
-    var target = gl4.createImg('star.png', 'target'); 
+    var target = gl4.createImg('target.png', 'target'); 
 
     moveTo('player', 'mouse');
     on(or(mouseDown(), keyDown('space')),
        attract('ball', 'mouse', 2, 20));
     reflect('ball');
 
-    on(pulse(), create('star.png', 'enemy', rand({x: 0, y: 0}, {x: 800, y: 600})));
+    on(pulse(), create('enemy.png', 'enemy', rand({x: 0, y: 0}, {x: 800, y: 600})));
     on(hit('ball', 'enemy'),
        slowDown(MATCH_1, {x: 0.7, y: 0.7}),
        destroy(MATCH_2),

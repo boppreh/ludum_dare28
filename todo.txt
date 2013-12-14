@@ -77,10 +77,10 @@ Assets
     [ ] Mission failed
     [ ] UI sounds
 [ ] Graphics
-    [ ] Ball
-    [ ] Player
-    [ ] Enemy(ies?)
-    [ ] Target
+    [x] Ball
+    [x] Player
+    [x] Enemy(ies?)
+    [x] Target
     [ ] Background
     [ ] UI
     [ ] Pickups
