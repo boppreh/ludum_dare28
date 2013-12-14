@@ -21,7 +21,8 @@
         <script>
 //window.onclick = function() { gl4.isRunning() ? gl4.stop() : gl4.start(); }
 
-gl4.createImg('star.png', 'player'); 
+var star = gl4.createImg('star.png', 'player'); 
+star.effects.push(shadow(10, 10, 10));
 var ball = gl4.createImg('star.png', 'ball', {}, {}, {x: 0.01, y: 0.01, angle: 0}); 
 ball.effects.push(glow('blue', 10));
 
@@ -29,8 +30,9 @@ moveTo('player', 'mouse');
 on(or(mouseDown(), keyDown('space')),
    on(hit('player', 'ball'),
       //sound('http://opengameart.org/sites/default/files/jumpland.wav'),
-      follow('ball', 'mouse', -5, 1000)));
+      attract('ball', 'mouse', -5, 1000)));
 reflect('ball');
+
 
 gl4.start(true);
         </script>
