@@ -25,9 +25,32 @@ function makeCursor() {
        [tag('player', 'idle attractor'), untag('player', 'attractor')]);
 }
 
-function mainMechanics(props) {
-    props = fillDefault(props, {attackFrequency: 3});
+function Mission(props) {
+    var self = this;
+    props = fillDefault(props, {attackFrequency: 3,
+                                nLives: 1000,
+                                regeneration: 1,
+                                successCondition: function () { return [] },
+                                onSuccess: function () {},
+                                onFailure: function () {},
+                                damagePerHit: 100,
+                                onDamage: function () {
+                                    if (self.lives === undefined) return;
+                                    self.lives.value -= self.damagePerHit;
+                                },
+                                pointsPerKill: 10,
+                                onKill: function () {
+                                    if (self.points === undefined) return;
+                                    self.points.value += self.pointsPerKill;
+                                },
+                               });
 
+    for (var property in props) {
+        this[property] = props[property];
+    }
+}
+
+Mission.prototype.mainMechanics = function () {
     var ball = gl4.createImage('ball.png', 'ball', {}, {}, {},
                                {x: 0.01, y: 0.01, angle: 0}); 
     glow('ball', '#66F', 20);
@@ -35,15 +58,16 @@ function mainMechanics(props) {
 
     var target = gl4.createImage('target.png', 'target'); 
 
-    on(pulse(props.attackFrequency),
+    on(pulse(this.attackFrequency),
        create('enemy.png', 'enemy', randCircle(gl4.screen.pos, 400)));
     follow('enemy', 'target', 2);
     on(circleHit('enemy', 'target'),
-       destroy());
+       [destroy(), this.onDamage]);
     on(hit('ball', 'enemy'),
-       [destroy(MATCH_2), attract(MATCH_1, MATCH_2, -5), function () {
+       [destroy(MATCH_2), attract(MATCH_1, MATCH_2, -5), this.onKill,
+        function () {
             gl4.createImage('explosion.png', 'explosion', MATCH_2[0].pos);
-       }]);
+        }]);
     expand('explosion', 0.05);
     fadeOut('explosion', 0.1);
 
@@ -51,9 +75,9 @@ function mainMechanics(props) {
         // Make enemy face destination.
         enemy.pos.angle = Math.atan2(-enemy.inertia.y, enemy.inertia.x);
     });
-}
+};
 
-function startMission(props) {
+Mission.prototype.start = function () {
     gl4.unlayerAll();
 
     var gameLayer = gl4.layer();
@@ -61,30 +85,29 @@ function startMission(props) {
     makeCursor();
 
     var uiLayer = gl4.layer();
-    var lives = gl4.createText(props.nLives, 'text', {x: 50, y: 60}, {}, {});
-    lives.font = '72px Impact';
-    lives.color = 'red';
-    lives.alignment = 'left';
-    lives.minValue = 0;
-    var points = gl4.createText(0, 'text', {x: 50, y: 60 + 72}, {}, {});
-    points.font = lives.font;
-    points.color = 'green';
-    points.alignment = 'left';
-    points.minDigits = 5;
+    this.lives = gl4.createText(this.nLives, 'text', {x: 50, y: 60}, {}, {});
+    this.lives.font = '72px Impact';
+    this.lives.color = 'red';
+    this.lives.alignment = 'left';
+    this.lives.minValue = 0;
+    this.lives.maxValue = this.nLives;
+
+    this.points = gl4.createText(0, 'text', {x: 50, y: 60 + 72}, {}, {});
+    this.points.font = this.lives.font;
+    this.points.color = 'green';
+    this.points.alignment = 'left';
+    this.points.minDigits = 5;
     shadow('text');
     gl4.layer(gameLayer);
 
     attract('ball', 'attractor', 2, 20);
-    on(hit('enemy', 'target'),
-       lives.subtract());
-    on(hit('enemy', 'ball'),
-       points.add(10));
-    mainMechanics(props);
+    this.mainMechanics();
 
-    on(props.successCondition || function () { return [] },
-       props.onSuccess || function () {});
-    on(lives.at(0),
-       props.onFailure || function () {});
+    on(this.successCondition,
+       this.onSuccess);
+    on(this.lives.at(0),
+       this.onFailure);
+    gl4.register(this.lives.add(this.regeneartion));
 }
 
 //gl4.debug = true;
@@ -98,7 +121,8 @@ function makeStartScreen() {
     gl4.layer(lowerLayer);
 
     var demoLayer = gl4.layer();
-    mainMechanics({attackFrequency: 0.5});
+    var demoMission = new Mission({attackFrequency: 0.5});
+    demoMission.mainMechanics();
     attract('ball', 'enemy', 0.05);
     gl4.forEach('ball', function (ball) {
         ball.push({x: Math.random() * 2 - 1, y: -Math.random() * 2});
@@ -121,7 +145,10 @@ function makeStartScreen() {
     });
 
     on(click(btnStart), function () {
-        startMission({nLives: 10, onFailure: makeStartScreen});
+        var mission = new Mission({attackFrequency: 0.1,
+                                   nLives: 1000,
+                                   onFailure: makeStartScreen})
+        mission.start();
     });
 }
 
