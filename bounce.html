@@ -85,44 +85,43 @@ function startMission(props) {
 
 //gl4.debug = true;
 
-var lowerLayer = gl4.activeLayer;
-
-var topLayer = gl4.layer();
-makeCursor();
-gl4.layer(lowerLayer);
-
-var demoLayer = gl4.layer();
-mainMechanics({attackFrequency: 0.5});
-attract('ball', 'enemy', 0.05);
-gl4.forEach('ball', function (ball) {
-    ball.push({x: Math.random() * 2 - 1, y: -Math.random() * 2});
-});
-
-var startScreen = gl4.layer();
-var title = gl4.createText('Game Title', ['screen text'], {y: 200});
-title.font = '126px Impact';
-
-var btnStart = gl4.createText('New Game', ['screen text', 'button'], {y: 400});
-btnStart.font = '62px Impact';
-//btnStart.
-
-shadow('screen text');
-gl4.forEach('screen text', function (t) {
-    t.friction = {x: 0.01, y: 0.01, angle: 0.01};
-    t.push({x: Math.random() * 0.2 - 0.1,
-            y: Math.random() * 0.2 - 0.1,
-            angle: Math.random() * 0.002 - 0.001})
-});
-
 function makeStartScreen() {
     gl4.unlayerAll();
-    gl4.layer(demoLayer);
-    gl4.layer(startScreen);
+    var lowerLayer = gl4.activeLayer;
+
+    var topLayer = gl4.layer();
+    makeCursor();
+    gl4.layer(lowerLayer);
+
+    var demoLayer = gl4.layer();
+    mainMechanics({attackFrequency: 0.5});
+    attract('ball', 'enemy', 0.05);
+    gl4.forEach('ball', function (ball) {
+        ball.push({x: Math.random() * 2 - 1, y: -Math.random() * 2});
+    });
+
+    var startScreen = gl4.layer();
+    var title = gl4.createText('Game Title', ['screen text'], {y: 200});
+    title.font = '126px Impact';
+
+    var btnStart = gl4.createText('New Game', ['screen text', 'button'], {y: 400});
+    btnStart.font = '62px Impact';
+    //btnStart.
+
+    shadow('screen text');
+    gl4.forEach('screen text', function (t) {
+        t.friction = {x: 0.01, y: 0.01, angle: 0.01};
+        t.push({x: Math.random() * 0.2 - 0.1,
+                y: Math.random() * 0.2 - 0.1,
+                angle: Math.random() * 0.002 - 0.001})
+    });
+
+    on(mouseDown(btnStart), function () {
+        startMission({nLives: 10, onFailure: makeStartScreen});
+    });
 }
 
-on(mouseDown(btnStart), function () {
-    startMission({nLives: 10, onFailure: makeStartScreen});
-});
+makeStartScreen();
         </script>
     </body>
 </html>
