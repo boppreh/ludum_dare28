@@ -25,7 +25,9 @@ function makeCursor() {
        [tag('player', 'idle attractor'), untag('player', 'attractor')]);
 }
 
-function mainMechanics() {
+function mainMechanics(props) {
+    props = fillDefault(props, {attackFrequency: 3});
+
     var ball = gl4.createImage('ball.png', 'ball', {}, {}, {},
                                {x: 0.01, y: 0.01, angle: 0}); 
     glow('ball', '#66F', 20);
@@ -33,7 +35,7 @@ function mainMechanics() {
 
     var target = gl4.createImage('target.png', 'target'); 
 
-    on(pulse(3),
+    on(pulse(props.attackFrequency),
        create('enemy.png', 'enemy', randCircle(gl4.screen.pos, 400)));
     follow('enemy', 'target', 2);
     on(circleHit('enemy', 'target'),
@@ -73,7 +75,7 @@ function startMission(props) {
        lives.subtract());
     on(hit('enemy', 'ball'),
        points.add(10));
-    mainMechanics();
+    mainMechanics(props);
 
     on(props.successCondition || function () { return [] },
        props.onSuccess || function () {});
@@ -90,9 +92,8 @@ makeCursor();
 gl4.layer(lowerLayer);
 
 var demoLayer = gl4.layer();
-mainMechanics();
-attract('ball', 'target', 0.01);
-attract('ball', 'attractor', 0.1);
+mainMechanics({attackFrequency: 0.5});
+attract('ball', 'enemy', 0.05);
 gl4.forEach('ball', function (ball) {
     ball.push({x: Math.random() * 2 - 1, y: -Math.random() * 2});
 });
@@ -101,7 +102,7 @@ var startScreen = gl4.layer();
 var title = gl4.createText('Game Title', ['screen text'], {y: 200});
 title.font = '126px Impact';
 
-var btnStart = gl4.createText('Start', ['screen text', 'button'], {y: 400});
+var btnStart = gl4.createText('New Game', ['screen text', 'button'], {y: 400});
 btnStart.font = '62px Impact';
 //btnStart.
 
