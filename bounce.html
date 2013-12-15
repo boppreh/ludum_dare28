@@ -15,7 +15,7 @@
         <script>
 function Mission(nLives, successCondition, onSuccess, onFailure) {
     this.nLives = nLives;
-    this.successCondition = successCondition || function () { return false; };
+    this.successCondition = successCondition || function () { return []; };
     this.onSuccess = onSuccess || function () {};
     this.onFailure = onFailure || function () {};
 }
@@ -35,8 +35,9 @@ Mission.prototype.start = function () {
     push('idle attractor', {angle: 0.01})
     push('attractor', {angle: -0.1})
 
-    conditionalTag(or(mouseDown(), keyDown('space')), 'player', 
-                   'attractor', 'idle attractor');
+    on(or(mouseDown(), keyDown('space')),
+       [tag('player', 'attractor'), untag('player', 'idle attractor')],
+       [tag('player', 'idle attractor'), untag('player', 'attractor')]);
 
     var ball = gl4.createImg('ball.png', 'ball', {}, {}, {x: 0.01, y: 0.01, angle: 0}); 
     glow('ball', '#66F', 20);
@@ -46,15 +47,13 @@ Mission.prototype.start = function () {
 
     attract('ball', 'attractor', 2, 20);
 
-    on(pulse(), create('enemy.png', 'enemy', randCircle(gl4.screen.pos, 400)));
+    on(pulse(10),
+       create('enemy.png', 'enemy', randCircle(gl4.screen.pos, 400)));
     follow('enemy', 'target', 2);
     on(hit('enemy', 'target'),
-       destroy(),
-       lives.decrement);
+       [destroy(), lives.decrement]);
     on(hit('ball', 'enemy'),
-       destroy(MATCH_2),
-       attract(MATCH_1, MATCH_2, -5),
-       points.increment);
+       [destroy(MATCH_2), attract(MATCH_1, MATCH_2, -5), points.increment]);
 
     gl4.register('enemy', function(enemy) {
         // Make enemy face destination.
