@@ -54,8 +54,8 @@ Mission.prototype.start = function () {
        destroy(),
        lives.decrement);
     on(hit('ball', 'enemy'),
-       slowDown(MATCH_1, {x: 0.7, y: 0.7}),
        destroy(MATCH_2),
+       attract(MATCH_1, MATCH_2, -5),
        points.increment);
 
     gl4.register('enemy', function(enemy) {
