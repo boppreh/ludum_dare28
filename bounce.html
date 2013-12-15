@@ -61,8 +61,9 @@ Mission.prototype.stop = function () {
 
 
 gl4.debug = true;
-//var mission = new Mission(10);
-//mission.start();
+
+var lowerLayer = gl4.activeLayer;
+var topLayer = gl4.layer();
 
 var player = gl4.createImage('player.png', 'player'); 
 moveTo('player', 'mouse');
@@ -71,18 +72,31 @@ glow('attractor', '#66F', 20);
 push('idle attractor', {angle: 0.01})
 push('attractor', {angle: -0.1})
 
+gl4.layer(lowerLayer);
+
 on(or(mouseDown(), keyDown('space')),
    [tag('player', 'attractor'), untag('player', 'idle attractor')],
    [tag('player', 'idle attractor'), untag('player', 'attractor')]);
 
 
 var startScreen = gl4.layer();
-var title = gl4.createText('Game Title');
-title.friction = {x: 0.01, y: 0.01, angle: 0.01};
+var title = gl4.createText('Game Title', ['ui text'], {y: 200});
 title.alignment = 'center';
 title.font = '126px Impact';
-title.move({y: -100});
-title.push({y: -0.5, angle: 0.001});
+
+var btnStart = gl4.createText('Start', ['ui text'], {x: 50, y: 400});
+btnStart.font = '62px Impact';
+btnStart.alignment = 'left';
+//btnStart.
+
+gl4.forEach('ui text', function (t) {
+    t.friction = {x: 0.01, y: 0.01, angle: 0.01};
+    t.push({x: Math.random() * 0.2 - 0.1,
+            y: Math.random() * 0.2 - 0.1,
+            angle: Math.random() * 0.002 - 0.001})
+});
+
+shadow('ui text');
         </script>
     </body>
 </html>
