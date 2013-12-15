@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang='en'>
-<head>
-    <meta charset='utf-8' />
     <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <title>GL4</title>
     </head>
 
@@ -32,7 +31,7 @@ Mission.prototype.start = function () {
     var player = gl4.createImg('player.png', 'player'); 
     moveTo('player', 'mouse');
     shadow('idle attractor', 8, 8, 2);
-    glow('attractor', 'blue', 10);
+    glow('attractor', '#66F', 20);
     push('idle attractor', {angle: 0.01})
     push('attractor', {angle: -0.1})
 
@@ -40,8 +39,7 @@ Mission.prototype.start = function () {
                    'attractor', 'idle attractor');
 
     var ball = gl4.createImg('ball.png', 'ball', {}, {}, {x: 0.01, y: 0.01, angle: 0}); 
-    //ball.effects.push();
-    glow('ball', 'blue', 10);
+    glow('ball', '#66F', 20);
     reflect('ball');
 
     var target = gl4.createImg('target.png', 'target'); 
