@@ -13,6 +13,17 @@
         <script type='text/javascript' src='../gl4/behaviors.js'></script>
         <script type='text/javascript' src='../gl4/conditions.js'></script>
         <script>
+function makeCursor() {
+    var player = gl4.createImage('player.png', 'player'); 
+    moveTo('player', gl4.mouse);
+    shadow('idle attractor', 8, 8, 2);
+    glow('attractor', '#66F', 20);
+    push('idle attractor', {angle: 0.01})
+    push('attractor', {angle: -0.1})
+    on(or(mouseDown(), keyDown('space')),
+       [tag('player', 'attractor'), untag('player', 'idle attractor')],
+       [tag('player', 'idle attractor'), untag('player', 'attractor')]);
+}
 
 function mainMechanics() {
     var ball = gl4.createImage('ball.png', 'ball', {}, {}, {},
@@ -35,27 +46,8 @@ function mainMechanics() {
         enemy.pos.angle = Math.atan2(-enemy.inertia.y, enemy.inertia.x);
     });
 }
- 
-function makeCursor() {
-    var player = gl4.createImage('player.png', 'player'); 
-    moveTo('player', gl4.mouse);
-    shadow('idle attractor', 8, 8, 2);
-    glow('attractor', '#66F', 20);
-    push('idle attractor', {angle: 0.01})
-    push('attractor', {angle: -0.1})
-    on(or(mouseDown(), keyDown('space')),
-       [tag('player', 'attractor'), untag('player', 'idle attractor')],
-       [tag('player', 'idle attractor'), untag('player', 'attractor')]);
-}
 
-function Mission(nLives, successCondition, onSuccess, onFailure) {
-    this.nLives = nLives;
-    this.successCondition = successCondition || function () { return []; };
-    this.onSuccess = onSuccess || function () {};
-    this.onFailure = onFailure || function () {};
-}
-
-Mission.prototype.start = function () {
+function startMission(props) {
     gl4.unlayerAll();
 
     var gameLayer = gl4.layer();
@@ -63,29 +55,33 @@ Mission.prototype.start = function () {
     makeCursor();
 
     var uiLayer = gl4.layer();
-    var lives = gl4.createText(this.nLives, 'text', {x: 50, y: 60}, {}, {});
+    var lives = gl4.createText(props.nLives, 'text', {x: 50, y: 60}, {}, {});
     lives.font = '72px Impact';
     lives.color = 'red';
     lives.alignment = 'left';
+    lives.minValue = 0;
     var points = gl4.createText(0, 'text', {x: 50, y: 60 + 72}, {}, {});
     points.font = lives.font;
     points.color = 'green';
     points.alignment = 'left';
+    points.minDigits = 5;
     shadow('text');
     gl4.layer(gameLayer);
 
     attract('ball', 'attractor', 2, 20);
     mainMechanics();
 
-    on(this.successCondition,
-       this.onSuccess);
-    /*on(lives.isZero,
-       this.onFailure);*/
-};
+    on(hit('enemy', 'target'),
+       lives.subtract());
 
-Mission.prototype.stop = function () {
-    console.log('Ended mission.');
-};
+    on(hit('enemy', 'ball'),
+       points.add(100));
+
+    /*on(this.successCondition,
+       this.onSuccess);
+    on(lives.isZero,
+       this.onFailure);*/
+}
 
 //gl4.debug = true;
 
@@ -126,7 +122,7 @@ function startScreen() {
 }
 
 on(mouseDown(btnStart), function () {
-    new Mission(10).start();
+    startMission({nLives: 10});
 });
         </script>
     </body>
