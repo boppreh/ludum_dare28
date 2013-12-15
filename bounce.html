@@ -41,7 +41,11 @@ function mainMechanics(props) {
     on(circleHit('enemy', 'target'),
        destroy());
     on(hit('ball', 'enemy'),
-       [destroy(MATCH_2), attract(MATCH_1, MATCH_2, -5)]);
+       [destroy(MATCH_2), attract(MATCH_1, MATCH_2, -5), function () {
+            gl4.createImage('explosion.png', 'explosion', MATCH_2[0].pos);
+       }]);
+    expand('explosion', 0.03);
+    fadeOut('explosion', 0.1);
 
     gl4.register('enemy', function(enemy) {
         // Make enemy face destination.
