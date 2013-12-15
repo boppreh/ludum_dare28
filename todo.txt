@@ -11,9 +11,9 @@ Mechanics
 =========
 
 [x] Mouse loosely controls ball inertia
-[ ] Enemies spawn
+[x] Enemies spawn
 	[x] From inside an area
-	[ ] From the perimeter of an area
+	[x] From the perimeter of an area
 [x] Ball hitting enemy destroys enemy
 [ ] Enemies drops
 	[ ] Enemies drop items on death
