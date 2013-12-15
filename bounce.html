@@ -113,14 +113,14 @@ gl4.forEach('screen text', function (t) {
             angle: Math.random() * 0.002 - 0.001})
 });
 
-function startScreen() {
+function makeStartScreen() {
     gl4.unlayerAll();
     gl4.layer(demoLayer);
     gl4.layer(startScreen);
 }
 
 on(mouseDown(btnStart), function () {
-    startMission({nLives: 10});
+    startMission({nLives: 10, onFailure: makeStartScreen});
 });
         </script>
     </body>
