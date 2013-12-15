@@ -69,18 +69,16 @@ function startMission(props) {
     gl4.layer(gameLayer);
 
     attract('ball', 'attractor', 2, 20);
-    mainMechanics();
-
     on(hit('enemy', 'target'),
        lives.subtract());
-
     on(hit('enemy', 'ball'),
-       points.add(100));
+       points.add(10));
+    mainMechanics();
 
-    /*on(this.successCondition,
-       this.onSuccess);
-    on(lives.isZero,
-       this.onFailure);*/
+    on(props.successCondition || function () { return [] },
+       props.onSuccess || function () {});
+    on(lives.at(0),
+       props.onFailure || function () {});
 }
 
 //gl4.debug = true;
