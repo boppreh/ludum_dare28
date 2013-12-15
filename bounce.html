@@ -13,7 +13,6 @@
         <script type='text/javascript' src='../gl4/gl4.js'></script>
         <script type='text/javascript' src='../gl4/behaviors.js'></script>
         <script type='text/javascript' src='../gl4/conditions.js'></script>
-        <script type='text/javascript' src='../gl4/effects.js'></script>
         <script>
 function Mission(nLives, successCondition, onSuccess, onFailure) {
     this.nLives = nLives;
@@ -31,36 +30,41 @@ Mission.prototype.start = function () {
                                  'fillStyle': 'green'});
 
     var player = gl4.createImg('player.png', 'player'); 
-    push('player', {angle: 0.01})
-    player.effects.push(shadow(8, 8, 2));
-    var ball = gl4.createImg('ball.png', 'ball', {}, {}, {x: 0.01, y: 0.01, angle: 0}); 
-    ball.effects.push(glow('blue', 10));
-    var target = gl4.createImg('target.png', 'target'); 
-
     moveTo('player', 'mouse');
-    on(or(mouseDown(), keyDown('space')),
-       attract('ball', 'mouse', 2, 20));
+    shadow('idle attractor', 8, 8, 2);
+    glow('attractor', 'blue', 10);
+    push('idle attractor', {angle: 0.01})
+    push('attractor', {angle: -0.1})
+
+    conditionalTag('player', or(mouseDown(), keyDown('space')),
+                   'attractor', 'idle attractor');
+
+    var ball = gl4.createImg('ball.png', 'ball', {}, {}, {x: 0.01, y: 0.01, angle: 0}); 
+    //ball.effects.push();
+    glow('ball', 'blue', 10);
     reflect('ball');
 
+    var target = gl4.createImg('target.png', 'target'); 
+
+    attract('ball', 'attractor', 2, 20);
+
     on(pulse(), create('enemy.png', 'enemy', randCircle(gl4.screen.pos, 400)));
+    follow('enemy', 'target', 2);
+    on(hit('enemy', 'target'),
+       destroy(),
+       lives.decrement);
     on(hit('ball', 'enemy'),
        slowDown(MATCH_1, {x: 0.7, y: 0.7}),
        destroy(MATCH_2),
        points.increment);
 
-    follow('enemy', 'target', 2);
-
     gl4.register('enemy', function(enemy) {
         // Make enemy face destination.
         enemy.pos.angle = Math.atan2(-enemy.inertia.y, enemy.inertia.x);
     });
-    on(hit('enemy', 'target'),
-       destroy(MATCH_1),
-       lives.decrement);
 
     on(this.successCondition,
        this.onSuccess);
-
     on(lives.isZero,
        this.onFailure);
 };
