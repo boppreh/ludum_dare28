@@ -21,14 +21,14 @@ function Mission(nLives, successCondition, onSuccess, onFailure) {
 }
 
 Mission.prototype.start = function () {
-    var lives = gl4.createText(this.nLives, 'lives', {x: 0, y: 60}, {}, {},
-                               {'textAlign': 'left', 'font': '72px Impact',
-                                'fillStyle': 'red'});
-    var points = gl4.createText(0, 'points', {x: 0, y: 60 + 72}, {}, {},
-                                {'textAlign': 'left', 'font': '72px Impact',
-                                 'fillStyle': 'green'});
+    var lives = gl4.createText(this.nLives, 'lives', {x: 0, y: 60}, {}, {});
+    lives.font = '72px Impact';
+    lives.color = 'red';
+    var points = gl4.createText(0, 'points', {x: 0, y: 60 + 72}, {}, {});
+    points.font = lives.font;
+    points.color = 'green';
 
-    var player = gl4.createImg('player.png', 'player'); 
+    var player = gl4.createImage('player.png', 'player'); 
     moveTo('player', 'mouse');
     shadow('idle attractor', 8, 8, 2);
     glow('attractor', '#66F', 20);
@@ -39,21 +39,21 @@ Mission.prototype.start = function () {
        [tag('player', 'attractor'), untag('player', 'idle attractor')],
        [tag('player', 'idle attractor'), untag('player', 'attractor')]);
 
-    var ball = gl4.createImg('ball.png', 'ball', {}, {}, {x: 0.01, y: 0.01, angle: 0}); 
+    var ball = gl4.createImage('ball.png', 'ball', {}, {}, {},
+                               {x: 0.01, y: 0.01, angle: 0}); 
     glow('ball', '#66F', 20);
     reflect('ball');
-
-    var target = gl4.createImg('target.png', 'target'); 
-
     attract('ball', 'attractor', 2, 20);
 
-    on(pulse(10),
+    var target = gl4.createImage('target.png', 'target'); 
+
+    on(pulse(3),
        create('enemy.png', 'enemy', randCircle(gl4.screen.pos, 400)));
     follow('enemy', 'target', 2);
     on(hit('enemy', 'target'),
-       [destroy(), lives.decrement]);
+       [destroy(), lives.subtract()]);
     on(hit('ball', 'enemy'),
-       [destroy(MATCH_2), attract(MATCH_1, MATCH_2, -5), points.increment]);
+       [destroy(MATCH_2), attract(MATCH_1, MATCH_2, -5), points.add()]);
 
     gl4.register('enemy', function(enemy) {
         // Make enemy face destination.
@@ -62,8 +62,8 @@ Mission.prototype.start = function () {
 
     on(this.successCondition,
        this.onSuccess);
-    on(lives.isZero,
-       this.onFailure);
+    /*on(lives.isZero,
+       this.onFailure);*/
 };
 
 Mission.prototype.stop = function () {
@@ -71,7 +71,7 @@ Mission.prototype.stop = function () {
 };
 
 
-gl4.debug();
+gl4.debug = true;
 var mission = new Mission(10);
 mission.start();
         </script>
