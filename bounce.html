@@ -36,7 +36,7 @@ Mission.prototype.start = function () {
     push('idle attractor', {angle: 0.01})
     push('attractor', {angle: -0.1})
 
-    conditionalTag('player', or(mouseDown(), keyDown('space')),
+    conditionalTag(or(mouseDown(), keyDown('space')), 'player', 
                    'attractor', 'idle attractor');
 
     var ball = gl4.createImg('ball.png', 'ball', {}, {}, {x: 0.01, y: 0.01, angle: 0}); 
