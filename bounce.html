@@ -28,17 +28,6 @@ Mission.prototype.start = function () {
     points.font = lives.font;
     points.color = 'green';
 
-    var player = gl4.createImage('player.png', 'player'); 
-    moveTo('player', 'mouse');
-    shadow('idle attractor', 8, 8, 2);
-    glow('attractor', '#66F', 20);
-    push('idle attractor', {angle: 0.01})
-    push('attractor', {angle: -0.1})
-
-    on(or(mouseDown(), keyDown('space')),
-       [tag('player', 'attractor'), untag('player', 'idle attractor')],
-       [tag('player', 'idle attractor'), untag('player', 'attractor')]);
-
     var ball = gl4.createImage('ball.png', 'ball', {}, {}, {},
                                {x: 0.01, y: 0.01, angle: 0}); 
     glow('ball', '#66F', 20);
@@ -72,8 +61,28 @@ Mission.prototype.stop = function () {
 
 
 gl4.debug = true;
-var mission = new Mission(10);
-mission.start();
+//var mission = new Mission(10);
+//mission.start();
+
+var player = gl4.createImage('player.png', 'player'); 
+moveTo('player', 'mouse');
+shadow('idle attractor', 8, 8, 2);
+glow('attractor', '#66F', 20);
+push('idle attractor', {angle: 0.01})
+push('attractor', {angle: -0.1})
+
+on(or(mouseDown(), keyDown('space')),
+   [tag('player', 'attractor'), untag('player', 'idle attractor')],
+   [tag('player', 'idle attractor'), untag('player', 'attractor')]);
+
+
+var startScreen = gl4.layer();
+var title = gl4.createText('Game Title');
+title.friction = {x: 0.01, y: 0.01, angle: 0.01};
+title.alignment = 'center';
+title.font = '126px Impact';
+title.move({y: -100});
+title.push({y: -0.5, angle: 0.001});
         </script>
     </body>
 </html>
