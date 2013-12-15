@@ -116,7 +116,7 @@ function makeStartScreen() {
                 angle: Math.random() * 0.002 - 0.001})
     });
 
-    on(mouseDown(btnStart), function () {
+    on(click(btnStart), function () {
         startMission({nLives: 10, onFailure: makeStartScreen});
     });
 }
