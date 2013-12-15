@@ -36,7 +36,7 @@ function mainMechanics() {
     on(pulse(3),
        create('enemy.png', 'enemy', randCircle(gl4.screen.pos, 400)));
     follow('enemy', 'target', 2);
-    on(hit('enemy', 'target'),
+    on(circleHit('enemy', 'target'),
        destroy());
     on(hit('ball', 'enemy'),
        [destroy(MATCH_2), attract(MATCH_1, MATCH_2, -5)]);
