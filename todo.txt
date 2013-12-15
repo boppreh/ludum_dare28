@@ -1,10 +1,10 @@
 Screens
 =======
 
-[ ] Continue/New Game with demo on the background
+[x] Continue/New Game with demo on the background
 [ ] Mission choosing grid
 [ ] Upgrade/current stats
-[ ] Level screen
+[x] Level screen
 
 
 Mechanics
@@ -25,7 +25,7 @@ Mechanics
 	[ ] Ball resistance on hitting enemy
     [ ] Enemy speed
     [ ] Enemy acceleration
-    [ ] Enemy spawn rate
+    [x] Enemy spawn rate
 [ ] Temporary powerups
     [ ] Dropped by enemies
     [ ] Picked up by ball
@@ -42,7 +42,7 @@ Effects
 [x] Permanent effect around ball
 [ ] Enemy is created
 [ ] Player attracts ball
-[ ] Ball hits enemy
+[x] Ball hits enemy
 [ ] Ball picks up powerup
 [ ] Player picks up item/money
 [ ] Enemy hits center
@@ -81,6 +81,7 @@ Assets
     [x] Player
     [x] Enemy(ies?)
     [x] Target
+    [x] Explosion
     [ ] Background
     [ ] UI
     [ ] Pickups
