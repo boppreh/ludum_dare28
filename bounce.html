@@ -65,7 +65,7 @@ Mission.prototype.stop = function () {
 };
 
 
-gl4.debug = true;
+//gl4.debug = true;
 
 var lowerLayer = gl4.activeLayer;
 
@@ -83,28 +83,30 @@ gl4.layer(lowerLayer);
 
 var demoLayer = gl4.layer();
 mainMechanics();
+attract('ball', 'target', 0.01);
+attract('ball', 'attractor', 0.1);
 gl4.forEach('ball', function (ball) {
     ball.push({x: Math.random() * 2 - 1, y: -Math.random() * 2});
 });
 
 var startScreen = gl4.layer();
-var title = gl4.createText('Game Title', ['ui text'], {y: 200});
+var title = gl4.createText('Game Title', ['screen text'], {y: 200});
 title.alignment = 'center';
 title.font = '126px Impact';
 
-var btnStart = gl4.createText('Start', ['ui text'], {x: 150, y: 400});
+var btnStart = gl4.createText('Start', ['screen text', 'button'], {x: 50, y: 400});
 btnStart.font = '62px Impact';
+btnStart.aligment = 'left';
 //btnStart.
 
-on(distance('ui text', 'mouse', 10), glow);
-gl4.forEach('ui text', function (t) {
+gl4.forEach('screen text', function (t) {
     t.friction = {x: 0.01, y: 0.01, angle: 0.01};
     t.push({x: Math.random() * 0.2 - 0.1,
             y: Math.random() * 0.2 - 0.1,
             angle: Math.random() * 0.002 - 0.001})
 });
 
-shadow('ui text');
+shadow('screen text');
         </script>
     </body>
 </html>
