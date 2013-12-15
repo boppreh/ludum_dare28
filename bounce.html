@@ -91,12 +91,10 @@ gl4.forEach('ball', function (ball) {
 
 var startScreen = gl4.layer();
 var title = gl4.createText('Game Title', ['screen text'], {y: 200});
-title.alignment = 'center';
 title.font = '126px Impact';
 
-var btnStart = gl4.createText('Start', ['screen text', 'button'], {x: 50, y: 400});
+var btnStart = gl4.createText('Start', ['screen text', 'button'], {y: 400});
 btnStart.font = '62px Impact';
-btnStart.aligment = 'left';
 //btnStart.
 
 gl4.forEach('screen text', function (t) {
