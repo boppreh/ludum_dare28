@@ -58,16 +58,21 @@ function Mission(nLives, successCondition, onSuccess, onFailure) {
 Mission.prototype.start = function () {
     gl4.unlayerAll();
 
-    gl4.layer();
+    var gameLayer = gl4.layer();
 
     makeCursor();
 
-    var lives = gl4.createText(this.nLives, 'lives', {x: 0, y: 60}, {}, {});
+    var uiLayer = gl4.layer();
+    var lives = gl4.createText(this.nLives, 'text', {x: 50, y: 60}, {}, {});
     lives.font = '72px Impact';
     lives.color = 'red';
-    var points = gl4.createText(0, 'points', {x: 0, y: 60 + 72}, {}, {});
+    lives.alignment = 'left';
+    var points = gl4.createText(0, 'text', {x: 50, y: 60 + 72}, {}, {});
     points.font = lives.font;
     points.color = 'green';
+    points.alignment = 'left';
+    shadow('text');
+    gl4.layer(gameLayer);
 
     attract('ball', 'attractor', 2, 20);
     mainMechanics();
