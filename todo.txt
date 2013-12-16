@@ -2,7 +2,7 @@ Screens
 =======
 
 [x] Continue/New Game with demo on the background
-[ ] Mission choosing grid
+[/] Mission choosing grid
 [ ] Upgrade/current stats
 [x] Level screen
 
@@ -54,11 +54,11 @@ Effects
 Story
 =====
 
-[ ] Introduction
-[ ] Tutorial
-[ ] First mission
-[ ] Regular missions
-[ ] Last stand
+[x] Introduction
+[x] Tutorial
+[x] First mission
+[x] Regular missions
+[x] Last stand
 [?] Survival (arcade)
 
 
@@ -83,7 +83,7 @@ Assets
     [x] Target
     [x] Explosion
     [ ] Background
-    [ ] UI
+    [x] UI
     [ ] Pickups
     [ ] Screen UI components
 [ ] Music
