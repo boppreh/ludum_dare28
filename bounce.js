@@ -175,13 +175,13 @@ var currentLevel = 0,
     {attackFrequency: 0.3, nLives: 1000, goal: survive(30), fadeOutTime: 4.0,
      instructions: 'Nobody thought we needed more\nDefending was easy'},
 
-    {attackFrequency: 2.0, nLives: 1000, goal: survive(30), fadeOutTime: 8.0,
+    {attackFrequency: 2.0, nLives: 1000, goal: survive(30), fadeOutTime: 7.0,
      instructions: 'Until they came from all sides.'},
 
-    {attackFrequency: 4.0, nLives: 1000, damagePerHit: 10, goal: survive(30), fadeOutTime: 8.0,
-     instructions: 'The problem with one perfect weapon\nIs that you only get one'},
+    {attackFrequency: 4.0, nLives: 1000, damagePerHit: 0.5, goal: survive(30), fadeOutTime: 5.0,
+     instructions: 'The problem with having\nOne perfect weapon\nIs that you\nOnly get one'},
 
-    {attackFrequency: 0.1, nLives: 1000, goal: survive(10), fadeOutTime: 2.0,
+    {attackFrequency: 10, nLives: 1000, damagePerHit: 0.1, goal: survive(60), fadeOutTime: 2.0,
      instructions: 'DEFEND\nTHE\nBASE\nFOR THE LAST 60 seconds'},
 ];
 
@@ -194,6 +194,9 @@ function startLevel() {
     level.onFailure = startLevel;
     level.onSuccess = function () {
         gl4.layers[1].paused = true;
+        gl4.layers[2].paused = true;
+        gl4.layer();
+        makeCursor();
         var instructionText = gl4.createText('Victory!', [], {y: 500});
         instructionText.font = '48px Impact';
         instructionText.color = 'green';
