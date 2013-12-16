@@ -118,7 +118,8 @@ Mission.prototype.start = function () {
     gameLayer.paused = true;
     var instructionLayer = gl4.layer();
     makeCursor();
-    var instructionText = gl4.createText('Click to start', [], {y: 500});
+    var instructionText = gl4.createText('Click to start', 'text', {y: 500});
+    shadow('text');
     instructionText.font = '48px Impact';
     instructionText.color = 'green';
     on(mouseDown(),
@@ -135,22 +136,27 @@ function splashText(text, interval, fadeOutTime, onFinished) {
     shadow('tutorial text');
     var lines = text.split('\n'),
         n = lines.length,
-        spacing = canvas.height * 0.8 / n,
-        top = canvas.height * 0.2;
+        spacing = gl4.canvas.height * 0.8 / n,
+        top = gl4.canvas.height * 0.2;
 
+    fadeIn('appearing text');
+    fadeOut('disappearing text');
     lines.forEach(function (line) {
-        line = line || ' ';
-        var i = lines.indexOf(line);
-        gl4.schedule(i * interval, function () {
-            console.log('should have created the text');
-            var y = top + i * spacing,
-                text = gl4.createText(line, 'tutorial text', {y: y});
-            text.color = 'red';
-            text.font = '48px Impact';
+        if (!line) {
+            return;
+        }
 
-            var fade = fadeOut(text);
-            gl4.unregister(fade);
-            gl4.schedule(fadeOutTime, function () { gl4.register(fade); });
+        var i = lines.indexOf(line);
+        var y = n === 1 ? gl4.canvas.height / 2 : top + i * spacing,
+            text = gl4.createText(line, [], {y: y});
+        text.color = 'red';
+        text.font = '48px Impact';
+        text.alpha = 0.0;
+
+        gl4.schedule(i * interval, tag(text, 'appearing text'));
+        gl4.schedule(i * interval + fadeOutTime, function () {
+            text.untag('appearing text');
+            text.tag('disappearing text');
         });
     });
 
@@ -199,19 +205,19 @@ function startLevel() {
     var level = levels[currentLevel];
     level.onFailure = startLevel;
     level.onSuccess = function () {
+        destroy('player')();
         gl4.layers[1].paused = true;
         gl4.layers[2].paused = true;
         gl4.layer();
         makeCursor();
-        var instructionText = gl4.createText('Victory!', [], {y: 500});
+        var instructionText = gl4.createText('Victory!', 'text', {y: 500});
         instructionText.font = '48px Impact';
         instructionText.color = 'green';
-        gl4.schedule(1, function() {
-            gl4.schedule(2, function () {
-                currentLevel++;
-                gl4.unlayerAll();
-                startLevel();
-            });
+        shadow('text');
+        gl4.schedule(3, function () {
+            currentLevel++;
+            gl4.unlayerAll();
+            startLevel();
         });
     }
 
