@@ -64,7 +64,7 @@ Mission.prototype.mainMechanics = function () {
     follow('enemy', 'target', 2);
     on(circleHit('enemy', 'target'),
        [destroy(), function () { self.onDamage(self); } ]);
-    on(hit('ball', 'enemy'),
+    on(circleHit('ball', 'enemy'),
        [destroy(MATCH_2), attract(MATCH_1, MATCH_2, -5), this.onKill,
         function () {
             gl4.createImage('explosion.png', 'explosion', MATCH_2[0].pos);
@@ -91,7 +91,6 @@ Mission.prototype.start = function () {
     this.time.color = '#66F';
     this.time.alignment = 'right';
     gl4.register(function () {
-        console.log('a');
         self.time.value = gl4.seconds - self.startTime;
     });
 
@@ -124,13 +123,14 @@ Mission.prototype.start = function () {
     gameLayer.paused = true;
     var instructionLayer = gl4.layer();
     makeCursor();
-    var instructionText = gl4.createText('Click to start');
+    var instructionText = gl4.createText('Click to start', [], {y: 500});
     instructionText.font = '48px Impact';
     instructionText.color = 'green';
     on(mouseDown(),
        function () {
            self.startTime = gl4.seconds;
            gameLayer.paused = false;
+           uiLayer.paused = false;
            gl4.unlayer();
        });
 }
@@ -163,35 +163,27 @@ function splashText(text, interval, fadeOutTime, onFinished) {
 
 function survive(time) {
     var survived = false;
-    gl4.schedule(time, function () {
-        survived = true;
-    });
-    return function () {
-        return survived;
-    }
-}
-
-function survive(time) {
-    var survived = false;
-    gl4.schedule(time, function () {
-        survived = true;
-    });
-    return function () {
-        return survived;
+    return function (mission) {
+        return gl4.seconds - mission.startTime > time;
     }
 }
 
 //gl4.debug = true;
 var currentLevel = 0,
     levels = [
-              {attackFrequency: 0.1, nLives: 1000},
+              {attackFrequency: 0.1, nLives: 1000, goal: survive(10)},
              ];
 
 function startLevel() {
+    if (currentLevel >= levels.length) {
+        splashText('CONGRATULATIONS!\nYOU SAVE LIKE\nEVERYTHING!', 1.5, 1.0, makeStartScreen);
+        return;
+    }
     var level = levels[currentLevel];
     level.onFailure = startLevel;
     level.onSuccess = function () {
         currentLevel++;
+        gl4.unlayerAll();
         startLevel();
     }
 
@@ -200,7 +192,7 @@ function startLevel() {
     gl4.unlayerAll();
     gl4.layer();
     makeCursor();
-    splashText('DEFEND\nTHE\nBASE', 0.8, 1.0, function () {
+    splashText('DEFEND\nTHE\nBASE\nfor 10 seconds', 0.8, 1.0, function () {
         mission.start();
     });
 }
