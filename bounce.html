@@ -72,7 +72,6 @@ Mission.prototype.mainMechanics = function () {
     fadeOut('explosion', 0.1);
 
     gl4.register('enemy', function(enemy) {
-        // Make enemy face destination.
         enemy.pos.angle = Math.atan2(-enemy.inertia.y, enemy.inertia.x);
     });
 };
@@ -110,7 +109,7 @@ Mission.prototype.start = function () {
        this.onFailure);
 }
 
-function splashText(text, interval, onFinished) {
+function splashText(text, interval, fadeOutTime, onFinished) {
     gl4.layer();
     shadow('tutorial text');
     var lines = text.split('\n'),
@@ -121,18 +120,17 @@ function splashText(text, interval, onFinished) {
     lines.forEach(function (line) {
         var i = lines.indexOf(line);
         gl4.schedule(i * interval, function () {
-            console.log('a');
             var y = top + i * spacing,
                 text = gl4.createText(line, 'tutorial text', {y: y});
             text.color = 'red';
             text.font = '96px Impact';
 
-            delay(interval * n - (n - i - 1) * 0.01, fadeOut(text));
+            delay(fadeOutTime, fadeOut(text));
         });
     });
 
     if (onFinished) {
-        gl4.schedule(interval * n + 0.5, onFinished);
+        gl4.schedule(interval * n + fadeOutTime * .5, onFinished);
     }
 }
 
@@ -172,7 +170,7 @@ function makeStartScreen() {
 
     on(click(btnStart), function () {
         gl4.unlayerAll();
-        splashText('DEFEND\nTHE\nTARGET', 1, function () {
+        splashText('DEFEND\nTHE\nTARGET', 0.8, 1.0, function () {
             var mission = new Mission({attackFrequency: 0.1,
                                        nLives: 1000,
                                        onFailure: makeStartScreen})
