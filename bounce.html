@@ -178,8 +178,8 @@ function survive(time) {
 var currentLevel = 0,
     levels = [
 
-    {attackFrequency: 0.0, nLives: 1000, goal: survive(20),
-     instructions: 'We made the perfect weapon\n\n(Get used to it)'},
+    {attackFrequency: 0.0, nLives: 1000, goal: survive(20), textInterval: 1.5,
+     instructions: 'We made the perfect weapon\n\n(Click and hold, play around a bit)'},
 
     {attackFrequency: 0.3, nLives: 1000, goal: survive(30),
      instructions: 'Nobody thought we needed more\nDefending was easy'},
@@ -202,9 +202,18 @@ function startLevel() {
     var level = levels[currentLevel];
     level.onFailure = startLevel;
     level.onSuccess = function () {
-        currentLevel++;
-        gl4.unlayerAll();
-        startLevel();
+        gl4.layers[1].paused = true;
+        gl4.layers[2].paused = true;
+        var instructionText = gl4.createText('Victory!', [], {y: 500});
+        instructionText.font = '48px Impact';
+        instructionText.color = 'green';
+        gl4.schedule(1, function() {
+            gl4.schedule(2, function () {
+                currentLevel++;
+                gl4.unlayerAll();
+                startLevel();
+            });
+        });
     }
 
     var mission = new Mission(level)
@@ -212,9 +221,9 @@ function startLevel() {
     gl4.unlayerAll();
     gl4.layer();
     makeCursor();
-    splashText(level.instructions, 0.8, 1.0, function () {
-        mission.start();
-    });
+    splashText(level.instructions,
+               level.textInterval || 0.8, level.textInterval + 0.1,
+               function () { mission.start(); });
 }
 
 function makeStartScreen() {
