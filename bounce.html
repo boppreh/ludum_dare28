@@ -148,6 +148,28 @@ function splashText(text, interval, fadeOutTime, onFinished) {
 }
 
 //gl4.debug = true;
+var currentLevel = 0,
+    levels = [
+              {attackFrequency: 0.1, nLives: 1000},
+             ];
+
+function startLevel() {
+    var level = levels[currentLevel];
+    level.onFailure = startLevel;
+    level.onSuccess = function () {
+        currentLevel++;
+        startLevel();
+    }
+
+    var mission = new Mission(level)
+
+    gl4.unlayerAll();
+    gl4.layer();
+    makeCursor();
+    splashText('DEFEND\nTHE\nBASE', 0.8, 1.0, function () {
+        mission.start();
+    });
+}
 
 function makeStartScreen() {
     gl4.unlayerAll();
@@ -181,17 +203,7 @@ function makeStartScreen() {
                 angle: Math.random() * 0.002 - 0.001})
     });
 
-    on(click(btnStart), function () {
-        gl4.unlayerAll();
-        gl4.layer();
-        makeCursor();
-        splashText('DEFEND\nTHE\nBASE', 0.8, 1.0, function () {
-            var mission = new Mission({attackFrequency: 0.1,
-                                       nLives: 1000,
-                                       onFailure: makeStartScreen})
-            mission.start();
-        });
-    });
+    on(click(btnStart), startLevel);
 }
 
 makeStartScreen();
