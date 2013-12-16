@@ -178,8 +178,8 @@ var currentLevel = 0,
     {attackFrequency: 2.0, nLives: 1000, goal: survive(30), fadeOutTime: 8.0,
      instructions: 'Until they came from all sides.'},
 
-    {attackFrequency: 4.0, nLives: 1000, damagePerHit: 10, goal: survive(30), fadeOutTime: 2.0,
-     instructions: 'The problem with have one perfect weapon\nIs that you only get one'},
+    {attackFrequency: 4.0, nLives: 1000, damagePerHit: 10, goal: survive(30), fadeOutTime: 8.0,
+     instructions: 'The problem with one perfect weapon\nIs that you only get one'},
 
     {attackFrequency: 0.1, nLives: 1000, goal: survive(10), fadeOutTime: 2.0,
      instructions: 'DEFEND\nTHE\nBASE\nFOR THE LAST 60 seconds'},
