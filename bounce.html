@@ -171,8 +171,10 @@ function survive(time) {
 //gl4.debug = true;
 var currentLevel = 0,
     levels = [
-              {attackFrequency: 0.1, nLives: 1000, goal: survive(10)},
-             ];
+
+    {attackFrequency: 0.1, nLives: 1000, goal: survive(10),
+     instructions = 'DEFEND\nTHE\nBASE\nfor 10 seconds'},
+];
 
 function startLevel() {
     if (currentLevel >= levels.length) {
@@ -192,7 +194,7 @@ function startLevel() {
     gl4.unlayerAll();
     gl4.layer();
     makeCursor();
-    splashText('DEFEND\nTHE\nBASE\nfor 10 seconds', 0.8, 1.0, function () {
+    splashText(level.instructions, 0.8, 1.0, function () {
         mission.start();
     });
 }
