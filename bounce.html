@@ -110,6 +110,32 @@ Mission.prototype.start = function () {
        this.onFailure);
 }
 
+function splashText(text, onFinished) {
+    gl4.layer();
+    shadow('tutorial text');
+    var lines = text.split('\n'),
+        spacing = canvas.height * 0.8 / lines.length,
+        top = canvas.height * 0.2;
+        interval = 2;
+
+    lines.forEach(function (line) {
+        var i = lines.indexOf(line);
+        gl4.schedule(i * interval, function () {
+            console.log('a');
+            var y = top + i * spacing,
+                text = gl4.createText(line, 'tutorial text', {y: y});
+            text.color = 'red';
+            text.font = '96px Impact';
+
+            delay(2, fadeOut(text));
+        });
+    });
+
+    if (onFinished) {
+        gl4.schedule(interval * lines.length, onFinished);
+    }
+}
+
 //gl4.debug = true;
 
 function makeStartScreen() {
