@@ -91,7 +91,11 @@ Mission.prototype.start = function () {
     this.time.color = '#66F';
     this.time.alignment = 'right';
     gl4.register(function () {
-        self.time.value = gl4.seconds - self.startTime;
+        if (self.targetTime) {
+            self.time.value = self.targetTime - (gl4.seconds - self.startTime);
+        } else {
+            self.time.value = gl4.seconds - self.startTime;
+        }
     });
 
     this.lives = gl4.createText(this.nLives, 'text', {x: 50, y: 60});
@@ -144,12 +148,13 @@ function splashText(text, interval, fadeOutTime, onFinished) {
         top = canvas.height * 0.2;
 
     lines.forEach(function (line) {
+        line = line || ' ';
         var i = lines.indexOf(line);
         gl4.schedule(i * interval, function () {
             var y = top + i * spacing,
                 text = gl4.createText(line, 'tutorial text', {y: y});
             text.color = 'red';
-            text.font = '96px Impact';
+            text.font = '48px Impact';
 
             delay(fadeOutTime, fadeOut(text));
         });
@@ -164,6 +169,7 @@ function splashText(text, interval, fadeOutTime, onFinished) {
 function survive(time) {
     var survived = false;
     return function (mission) {
+        mission.targetTime = time;
         return gl4.seconds - mission.startTime > time;
     }
 }
@@ -172,8 +178,20 @@ function survive(time) {
 var currentLevel = 0,
     levels = [
 
+    {attackFrequency: 0.0, nLives: 1000, goal: survive(20),
+     instructions: 'We made the perfect weapon\n\n(Get used to it)'},
+
+    {attackFrequency: 0.3, nLives: 1000, goal: survive(30),
+     instructions: 'Nobody thought we needed more\nDefending was easy'},
+
+    {attackFrequency: 2.0, nLives: 1000, goal: survive(30),
+     instructions: 'Until they came from all sides.'},
+
+    {attackFrequency: 4.0, nLives: 1000, damagePerHit: 10, goal: survive(30),
+     instructions: 'The problem with have one perfect weapon\nIs that you only get one'},
+
     {attackFrequency: 0.1, nLives: 1000, goal: survive(10),
-     instructions = 'DEFEND\nTHE\nBASE\nfor 10 seconds'},
+     instructions: 'DEFEND\nTHE\nBASE\nfor 10 seconds'},
 ];
 
 function startLevel() {
