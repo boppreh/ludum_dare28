@@ -2,7 +2,7 @@
 <html lang='en'>
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-        <title>GL4</title>
+        <title>Bounce (Ludum Dare #28)</title>
     </head>
 
     <body style='background: black;'>
@@ -160,7 +160,7 @@ function splashText(text, interval, fadeOutTime, onFinished) {
         });
     });
 
-    gl4.schedule(interval * n + fadeOutTime * .5, function () {
+    gl4.schedule(interval * n + fadeOutTime, function () {
         gl4.unlayer();
         onFinished && onFinished();
     });
@@ -178,20 +178,20 @@ function survive(time) {
 var currentLevel = 0,
     levels = [
 
-    {attackFrequency: 0.0, nLives: 1000, goal: survive(20), textInterval: 1.5,
+    {attackFrequency: 0.0, nLives: 1000, goal: survive(20), fadeOutTime: 3.0,
      instructions: 'We made the perfect weapon\n\n(Click and hold, play around a bit)'},
 
-    {attackFrequency: 0.3, nLives: 1000, goal: survive(30),
+    {attackFrequency: 0.3, nLives: 1000, goal: survive(30), fadeOutTime: 4.0,
      instructions: 'Nobody thought we needed more\nDefending was easy'},
 
-    {attackFrequency: 2.0, nLives: 1000, goal: survive(30),
+    {attackFrequency: 2.0, nLives: 1000, goal: survive(30), fadeOutTime: 8.0,
      instructions: 'Until they came from all sides.'},
 
-    {attackFrequency: 4.0, nLives: 1000, damagePerHit: 10, goal: survive(30),
+    {attackFrequency: 4.0, nLives: 1000, damagePerHit: 10, goal: survive(30), fadeOutTime: 2.0,
      instructions: 'The problem with have one perfect weapon\nIs that you only get one'},
 
-    {attackFrequency: 0.1, nLives: 1000, goal: survive(10),
-     instructions: 'DEFEND\nTHE\nBASE\nfor 10 seconds'},
+    {attackFrequency: 0.1, nLives: 1000, goal: survive(10), fadeOutTime: 2.0,
+     instructions: 'DEFEND\nTHE\nBASE\nFOR THE LAST 60 seconds'},
 ];
 
 function startLevel() {
@@ -203,7 +203,6 @@ function startLevel() {
     level.onFailure = startLevel;
     level.onSuccess = function () {
         gl4.layers[1].paused = true;
-        gl4.layers[2].paused = true;
         var instructionText = gl4.createText('Victory!', [], {y: 500});
         instructionText.font = '48px Impact';
         instructionText.color = 'green';
@@ -222,7 +221,7 @@ function startLevel() {
     gl4.layer();
     makeCursor();
     splashText(level.instructions,
-               level.textInterval || 0.8, level.textInterval + 0.1,
+               0.8, (level.fadeOutTime || 1.0) + 0.1,
                function () { mission.start(); });
 }
 
