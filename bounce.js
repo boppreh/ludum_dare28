@@ -233,7 +233,7 @@ function makeStartScreen() {
     });
 
     var startScreen = gl4.layer();
-    var title = gl4.createText('Game Title', ['screen text'], {y: 200});
+    var title = gl4.createText('Bounce', ['screen text'], {y: 200});
     title.font = '126px Impact';
 
     var btnStart = gl4.createText('New Game', ['screen text', 'button'], {y: 400});
