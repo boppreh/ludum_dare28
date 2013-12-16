@@ -1,8 +1,8 @@
-var playerPng = 'raw.github.com/boppreh/ludum_dare28/master/player.png',
-    ballPng = 'raw.github.com/boppreh/ludum_dare28/master/ball.png',
-    targetPng = 'raw.github.com/boppreh/ludum_dare28/master/target.png',
-    enemyPng = 'raw.github.com/boppreh/ludum_dare28/master/enemy.png',
-    explosionPng = 'raw.github.com/boppreh/ludum_dare28/master/explosion.png';
+var playerPng = 'http://raw.github.com/boppreh/ludum_dare28/master/player.png',
+    ballPng = 'http://raw.github.com/boppreh/ludum_dare28/master/ball.png',
+    targetPng = 'http://raw.github.com/boppreh/ludum_dare28/master/target.png',
+    enemyPng = 'http://raw.github.com/boppreh/ludum_dare28/master/enemy.png',
+    explosionPng = 'http://raw.github.com/boppreh/ludum_dare28/master/explosion.png';
 
 function makeCursor() {
     var player = gl4.createImage(playerPng, 'player'); 
