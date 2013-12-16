@@ -86,6 +86,15 @@ Mission.prototype.start = function () {
     makeCursor();
 
     var uiLayer = gl4.layer();
+    this.time = gl4.createText(0, 'text', {x: gl4.canvas.width - 50, y: 60});
+    this.time.font = '72px Impact';
+    this.time.color = '#66F';
+    this.time.alignment = 'right';
+    gl4.register(function () {
+        console.log('a');
+        self.time.value = gl4.seconds - self.startTime;
+    });
+
     this.lives = gl4.createText(this.nLives, 'text', {x: 50, y: 60});
     this.lives.friction.value = 0.1;
     this.lives.font = '72px Impact';
@@ -99,6 +108,7 @@ Mission.prototype.start = function () {
     this.points.color = 'green';
     this.points.alignment = 'left';
     this.points.minDigits = 5;
+
     shadow('text');
     gl4.layer(gameLayer);
 
@@ -110,6 +120,7 @@ Mission.prototype.start = function () {
     on(this.lives.at(0),
        this.onFailure);
 
+    uiLayer.paused = true;
     gameLayer.paused = true;
     var instructionLayer = gl4.layer();
     makeCursor();
@@ -118,6 +129,7 @@ Mission.prototype.start = function () {
     instructionText.color = 'green';
     on(mouseDown(),
        function () {
+           self.startTime = gl4.seconds;
            gameLayer.paused = false;
            gl4.unlayer();
        });
