@@ -30,7 +30,7 @@ function Mission(props) {
     props = fillDefault(props, {attackFrequency: 3,
                                 nLives: 1000,
                                 //regeneration: 1,
-                                successCondition: function () { return [] },
+                                goal: function () { return false },
                                 onSuccess: function () {},
                                 onFailure: function () {},
                                 damagePerHit: 1,
@@ -51,6 +51,7 @@ function Mission(props) {
 }
 
 Mission.prototype.mainMechanics = function () {
+    var self = this;
     var ball = gl4.createImage('ball.png', 'ball', {}, {}, {},
                                {x: 0.01, y: 0.01, angle: 0}); 
     glow('ball', '#66F', 20);
@@ -62,7 +63,7 @@ Mission.prototype.mainMechanics = function () {
        create('enemy.png', 'enemy', randCircle(gl4.screen.pos, 400)));
     follow('enemy', 'target', 2);
     on(circleHit('enemy', 'target'),
-       [destroy(), this.onDamage]);
+       [destroy(), function () { self.onDamage(self); } ]);
     on(hit('ball', 'enemy'),
        [destroy(MATCH_2), attract(MATCH_1, MATCH_2, -5), this.onKill,
         function () {
@@ -77,6 +78,7 @@ Mission.prototype.mainMechanics = function () {
 };
 
 Mission.prototype.start = function () {
+    var self = this;
     gl4.unlayerAll();
 
     var gameLayer = gl4.layer();
@@ -103,7 +105,7 @@ Mission.prototype.start = function () {
     attract('ball', 'attractor', 2, 20);
     this.mainMechanics();
 
-    on(this.successCondition,
+    on(function () { return self.goal(self) ? [[]] : []; },
        this.onSuccess);
     on(this.lives.at(0),
        this.onFailure);
@@ -145,6 +147,26 @@ function splashText(text, interval, fadeOutTime, onFinished) {
         gl4.unlayer();
         onFinished && onFinished();
     });
+}
+
+function survive(time) {
+    var survived = false;
+    gl4.schedule(time, function () {
+        survived = true;
+    });
+    return function () {
+        return survived;
+    }
+}
+
+function survive(time) {
+    var survived = false;
+    gl4.schedule(time, function () {
+        survived = true;
+    });
+    return function () {
+        return survived;
+    }
 }
 
 //gl4.debug = true;
