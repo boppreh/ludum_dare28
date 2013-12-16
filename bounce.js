@@ -5,12 +5,12 @@ var playerPng = 'http://raw.github.com/boppreh/ludum_dare28/master/player.png',
     explosionPng = 'http://raw.github.com/boppreh/ludum_dare28/master/explosion.png';
 
 function makeCursor() {
-    var player = gl4.createImage(playerPng, 'player'); 
+    player = gl4.createImage(playerPng, 'player'); 
     moveTo('player', gl4.mouse);
     shadow('idle attractor', 8, 8, 2);
     glow('attractor', '#66F', 20);
-    push('idle attractor', {angle: 0.01})
-    push('attractor', {angle: -0.1})
+    push('idle attractor', {angle: 0.01});
+    push('attractor', {angle: -0.1});
     on(or(mouseDown(), keyDown('space')),
        [tag('player', 'attractor'), untag('player', 'idle attractor')],
        [tag('player', 'idle attractor'), untag('player', 'attractor')]);
@@ -21,19 +21,19 @@ function Mission(props) {
     props = fillDefault(props, {attackFrequency: 3,
                                 nLives: 1000,
                                 //regeneration: 1,
-                                goal: function () { return false },
+                                goal: function () { return false; },
                                 onSuccess: function () {},
                                 onFailure: function () {},
                                 damagePerHit: 1,
                                 onDamage: function () {
-                                    if (self.lives === undefined) return;
+                                    if (self.lives === undefined) { return; }
                                     self.lives.push({value: -self.damagePerHit});
                                 },
                                 pointsPerKill: 10,
                                 onKill: function () {
-                                    if (self.points === undefined) return;
+                                    if (self.points === undefined) { return; }
                                     self.points.value += self.pointsPerKill;
-                                },
+                                }
                                });
 
     for (var property in props) {
@@ -128,7 +128,7 @@ Mission.prototype.start = function () {
            uiLayer.paused = false;
            gl4.unlayer();
        });
-}
+};
 
 function splashText(text, interval, fadeOutTime, onFinished) {
     gl4.layer();
@@ -142,12 +142,15 @@ function splashText(text, interval, fadeOutTime, onFinished) {
         line = line || ' ';
         var i = lines.indexOf(line);
         gl4.schedule(i * interval, function () {
+            console.log('should have created the text');
             var y = top + i * spacing,
                 text = gl4.createText(line, 'tutorial text', {y: y});
             text.color = 'red';
             text.font = '48px Impact';
 
-            delay(fadeOutTime, fadeOut(text));
+            var fade = fadeOut(text);
+            gl4.unregister(fade);
+            gl4.schedule(fadeOutTime, function () { gl4.register(fade); });
         });
     });
 
@@ -182,7 +185,7 @@ var currentLevel = 0,
      instructions: 'The problem with having\nOne perfect weapon\nIs that you\nOnly get one'},
 
     {attackFrequency: 10, nLives: 1000, damagePerHit: 0.1, goal: survive(60), fadeOutTime: 2.0,
-     instructions: 'DEFEND\nTHE\nBASE\nFOR THE LAST 60 seconds'},
+     instructions: 'DEFEND\nTHE\nBASE\nFOR THE LAST 60 seconds'}
 ];
 
 function startLevel() {
