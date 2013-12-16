@@ -187,6 +187,7 @@ var currentLevel = 0,
 
 function startLevel() {
     if (currentLevel >= levels.length) {
+        currentLevel = 0;
         splashText('CONGRATULATIONS!\nYOU SAVE LIKE\nEVERYTHING!', 1.5, 1.0, makeStartScreen);
         return;
     }
