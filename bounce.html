@@ -141,9 +141,10 @@ function splashText(text, interval, fadeOutTime, onFinished) {
         });
     });
 
-    if (onFinished) {
-        gl4.schedule(interval * n + fadeOutTime * .5, onFinished);
-    }
+    gl4.schedule(interval * n + fadeOutTime * .5, function () {
+        gl4.unlayer();
+        onFinished && onFinished();
+    });
 }
 
 //gl4.debug = true;
@@ -182,7 +183,9 @@ function makeStartScreen() {
 
     on(click(btnStart), function () {
         gl4.unlayerAll();
-        splashText('DEFEND\nTHE\nTARGET', 0.8, 1.0, function () {
+        gl4.layer();
+        makeCursor();
+        splashText('DEFEND\nTHE\nBASE', 0.8, 1.0, function () {
             var mission = new Mission({attackFrequency: 0.1,
                                        nLives: 1000,
                                        onFailure: makeStartScreen})
