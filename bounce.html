@@ -107,6 +107,18 @@ Mission.prototype.start = function () {
        this.onSuccess);
     on(this.lives.at(0),
        this.onFailure);
+
+    gameLayer.paused = true;
+    var instructionLayer = gl4.layer();
+    makeCursor();
+    var instructionText = gl4.createText('Click to start');
+    instructionText.font = '48px Impact';
+    instructionText.color = 'green';
+    on(mouseDown(),
+       function () {
+           gameLayer.paused = false;
+           gl4.unlayer();
+       });
 }
 
 function splashText(text, interval, fadeOutTime, onFinished) {
