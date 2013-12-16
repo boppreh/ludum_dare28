@@ -186,6 +186,8 @@ var currentLevel = 0,
 ];
 
 function startLevel() {
+    gl4.unlayerAll();
+
     if (currentLevel >= levels.length) {
         currentLevel = 0;
         splashText('CONGRATULATIONS!\nYOU SAVED LIKE\nEVERYTHING!', 1.5, 1.0, makeStartScreen);
@@ -212,7 +214,6 @@ function startLevel() {
 
     var mission = new Mission(level)
 
-    gl4.unlayerAll();
     gl4.layer();
     makeCursor();
     splashText(level.instructions,
